@@ -15,16 +15,17 @@
     ],
     "directories": {
       "buildResources": "resources"
-    },
-    "publish": null
+    }
   },
   "scripts": {
     "postinstall": "electron-builder install-app-deps",
     "start": "node build/start.js",
+    "publish": "build -p always",
     "release": "webpack --config=build/webpack.app.config.js --env=production && electron-builder"
   },
   "dependencies": {
     "cheerio": "^1.0.0-rc.2",
+    "electron-updater": "^2.21.8",
     "fs-jetpack": "^1.0.0",
     "is-online": "^7.0.0",
     "request": "^2.85.0",

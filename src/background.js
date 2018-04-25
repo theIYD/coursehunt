@@ -6,6 +6,7 @@
 import path from "path";
 import url from "url";
 import { app, Menu, BrowserWindow } from "electron";
+const {autoUpdater} = require("electron-updater");
 //import { devMenuTemplate } from "./menu/dev_menu_template";
 //import { editMenuTemplate } from "./menu/edit_menu_template";
 //import createWindow from "./helpers/window";
@@ -32,7 +33,7 @@ if (env.name !== "production") {
 
 app.on("ready", () => {
   //setApplicationMenu();
-
+  autoUpdater.checkForUpdatesAndNotify();
   const mainWindow = new BrowserWindow({width: 1000, height: 700})
 
   mainWindow.loadURL(
