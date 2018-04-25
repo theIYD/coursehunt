@@ -63,3 +63,32 @@ body {
   display: flex;
   justify-content: space-between;
 }
+
+#overlay {
+  position: fixed;
+  display: none;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgb(255, 255, 255);
+  z-index: 2;
+  animation: fadeinout 2.5s linear forwards;
+}
+
+#text{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  font-size: 1.5em;
+  color: #000;
+  transform: translate(-50%,-50%);
+  -ms-transform: translate(-50%,-50%);
+}
+
+@keyframes fadeinout {
+  0%,100% { opacity: 0 }
+  50% { opacity: 0.9 }
+}

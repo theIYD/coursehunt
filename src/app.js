@@ -91,10 +91,16 @@ window.onload = () => {
 
   helpers.getQuerySelector(".progress").style.display = 'none';
   getVideos.addEventListener("click", () => {
+    helpers.getQuerySelector("#overlay").style.display = 'block';
     const url = helpers.getQuerySelector("#url").value;
     let course_url_title = url.split('/');
     getCourseNamesAndURLS(url)
       .then(result => {
+        if(result) {
+          setTimeout(() => {
+            helpers.getQuerySelector("#overlay").style.display = 'none';
+          }, 3000)
+        }
         helpers.getQuerySelector("#resultDiv").style.display = "block";
         dwnBtn = document.createElement("button");
         dwnBtn.id = "download";
