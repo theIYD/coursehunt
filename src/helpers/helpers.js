@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const request = require('request');
 const progress = require('request-progress');
-const app = require('electron').remote;
+const {app} = require('electron').remote;
 
 const replaceAll = (target, search, replacement) => {
   return target.replace(new RegExp(search, 'g'), replacement);
@@ -11,6 +11,19 @@ const replaceAll = (target, search, replacement) => {
 const getQuerySelector = (selector) => {
   return document.querySelector(selector);
 };
+
+const downloadTimeRemaining = (string, pad, length) => {
+    return (new Array(length+1).join(pad)+string).slice(-length);
+}
+
+const formatBytes = (bytes, decimals) => {
+    if(bytes == 0) return '0 Bytes';
+    var k = 1024,
+        dm = decimals || 2,
+        sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
+        i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+ }
 
 const getDownloadedVideos = (downloadFolder) => {
   const log = `${downloadFolder}${path.sep}chapters.txt`;
@@ -56,19 +69,27 @@ const downloadOne = (url, chapterName, dwnpath, nextVideo) => {
     .on('progress', state => {
       console.log(`Downloading: ${Math.floor(state.percent * 100)}% | ${Math.floor(state.speed / 1024) } kB/s | ${Math.floor(state.time.remaining)}s | ${Math.floor(state.size.transferred / 1024)} kilobytes`)
 
+      let remainingTime = state.time.remaining;
+      let hours = Math.floor(remainingTime / 3600);
+      remainingTime -= hours * 3600;
+
+      let minutes = Math.floor(remainingTime / 60);
+      let seconds = remainingTime - minutes * 60;
+      
+      getQuerySelector("#download").style.display = 'none';
+      getQuerySelector("#downloadWrap").style.display = 'block';
       getQuerySelector(".progress").style.display = 'block';
       getQuerySelector("#chaptername").textContent = chapterName;
       getQuerySelector("#speed").textContent = `${Math.floor(state.speed / 1024) } kB/s`;
-      getQuerySelector("#timeLeft").textContent = `${Math.floor(state.time.remaining / 60)}m`;
+      getQuerySelector("#timeLeft").textContent = `${downloadTimeRemaining(hours,'0',2)+'h:'+downloadTimeRemaining(minutes,'0',2)+'m:'+downloadTimeRemaining(seconds,'0',2)}s remaining`;
+      getQuerySelector("#transferred").textContent = `${formatBytes(state.size.transferred)} transferred`;
       getQuerySelector("#dynamic").style.width = `${Math.floor(state.percent * 100)}%`;
       getQuerySelector("#dynamic").setAttribute("aria-valuenow", Math.floor(state.percent * 100));
       getQuerySelector("#dynamic").textContent = `${Math.floor(state.percent * 100)}%`;
     })
     .on('error', err => {
       console.log(err);
-    })
-    .on('close', () => {
-      alert("Connection error. Please check your internet connectivity.");
+      alert("Connection error. Please check your internet connectivity." + err);
       app.relaunch();
       app.exit(0);
     })

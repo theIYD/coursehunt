@@ -76,22 +76,23 @@ function getCourseNamesAndURLS(courseURL) {
 /*  All Clientside Javascript */
 window.onload = () => {
   isOnline().then(online => {
-    if(!online) {
+    if (!online) {
       alert("You are offline. Make sure you are connected to the internet. Exiting...");
       app.exit(0);
     }
   });
 
   let videoBlock,
-   vidName,
+    vidName,
     dwnBtn,
-     li,
-      resultul = helpers.getQuerySelector("#resultUL"),
-       getVideos = helpers.getQuerySelector("#getVids");
+    li,
+    resultul = helpers.getQuerySelector("#resultUL"),
+    getVideos = helpers.getQuerySelector("#getVids");
 
   helpers.getQuerySelector(".progress").style.display = 'none';
   getVideos.addEventListener("click", () => {
     const url = helpers.getQuerySelector("#url").value;
+    let course_url_title = url.split('/');
     getCourseNamesAndURLS(url)
       .then(result => {
         helpers.getQuerySelector("#resultDiv").style.display = "block";
@@ -123,7 +124,12 @@ window.onload = () => {
             let dwnpath = dialog.showOpenDialog({
               properties: ['openDirectory']
             });
-            downloadAllVideos(result.chapterUrls, result.names, dwnpath);
+
+            if(!fs.existsSync(`${dwnpath}${path.sep}${course_url_title[course_url_title.length -1]}`)) {
+              fs.mkdirSync(`${dwnpath}${path.sep}${course_url_title[course_url_title.length -1]}`);
+            }
+            //console.log(`${dwnpath}${path.sep}${course_url_title[course_url_title.length -1]}`);
+            downloadAllVideos(result.chapterUrls, result.names, `${dwnpath}${path.sep}${course_url_title[course_url_title.length -1]}`);
           });
         }
       });

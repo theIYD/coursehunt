@@ -7,12 +7,15 @@
   "author": "Idrees Dargahwala",
   "main": "app/background.js",
   "build": {
-    "appId": "com.example.electron-boilerplate",
+    "appId": "com.shifters.coursehunt",
     "files": [
       "app/**/*",
       "node_modules/**/*",
       "package.json"
     ],
+    "directories": {
+      "buildResources": "resources"
+    },
     "publish": null
   },
   "scripts": {
