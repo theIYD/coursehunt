@@ -1,26 +1,22 @@
 import "./stylesheets/main.css";
-
-// Small helpers you might want to keep
-/*import "./helpers/context_menu.js";
-import "./helpers/external_links.js";*/
-
 const request = require('request');
 const progress = require('request-progress');
 const cheerio = require('cheerio');
 const path = require('path');
 const fs = require('fs');
+const isOnline = require('is-online');
 const {
-  dialog
+  dialog,
+  app
 } = require('electron').remote;
 const dns = require('dns');
 const folder = path.resolve(__dirname, 'files');
 
 let $ = cheerio.load(path.resolve(__dirname, "app", "app.html"));
 const progressDynamic = document.querySelector("#dynamic");
+
 /* The basic function which downloads a video from the url */
 function downloadOne(url, chapterName, dwnpath, nextVideo) {
-  /*let arr = url.split('/');
-  let fileName = arr[arr.length - 1];*/
   let req = progress(request(url), {
       throttle: 2000,
       delay: 1000
@@ -28,19 +24,21 @@ function downloadOne(url, chapterName, dwnpath, nextVideo) {
     .on('progress', state => {
       console.log(`Downloading: ${Math.floor(state.percent * 100)}% | ${Math.floor(state.speed / 1024) } kB/s | ${Math.floor(state.time.remaining)}s | ${Math.floor(state.size.transferred / 1024)} kilobytes`)
 
-      /*$('#dynamic').css("width", Math.floor(state.percent * 100) + "%")
-          .attr("aria-valuenow", Math.floor(state.percent * 100))
-          .text(Math.floor(state.percent * 100) + "% Complete");*/
       document.querySelector(".progress").style.display = 'block';
       document.querySelector("#chaptername").textContent = chapterName;
       document.querySelector("#speed").textContent = `${Math.floor(state.speed / 1024) } kB/s`;
-      document.querySelector("#timeLeft").textContent = `${Math.floor(state.time.remaining) / 60}m`;
+      document.querySelector("#timeLeft").textContent = `${Math.floor(state.time.remaining / 60)}m`;
       progressDynamic.style.width = `${Math.floor(state.percent * 100)}%`;
       progressDynamic.setAttribute("aria-valuenow", Math.floor(state.percent * 100));
       progressDynamic.textContent = `${Math.floor(state.percent * 100)}%`;
     })
     .on('error', err => {
       console.log(err);
+    })
+    .on('close', () => {
+      alert("Connection error. Please check your internet connectivity.");
+      app.relaunch();
+      app.exit(0);
     })
     .on('end', () => {
       fs.appendFile(path.resolve(`${dwnpath}${path.sep}chapters.txt`), chapterName + '\n', (err) => {
@@ -49,13 +47,11 @@ function downloadOne(url, chapterName, dwnpath, nextVideo) {
       nextVideo();
     })
     .pipe(fs.createWriteStream(path.resolve(`${dwnpath}${path.sep}${chapterName}.mp4`)));
-    //console.log(req);
 }
 
 /* Download all the videos at once. */
 function downloadAllVideos(videos, name, dwnpath) {
   let temp = findVideoExist(videos, name, dwnpath);
-  //console.log(temp);
 
   /* the loopDownload function reiterates over the array and download the files one by one instead of downloading together. 
   downloading together will reduce the speed and can cause crashes. */
@@ -74,10 +70,6 @@ function downloadAllVideos(videos, name, dwnpath) {
 function getCourseNamesAndURLS(courseURL) {
   return new Promise((resolve, reject) => {
     request(courseURL, (err, body) => {
-      /*fs.writeFile(path.resolve(__dirname, 'files', `file.html`), body.body, () => {
-          console.log("Done");
-      })*/
-      //console.log(body.body);
       let chapterUrls = [];
       let names = [];
       if (!err) {
@@ -117,11 +109,6 @@ function getCourseNamesAndURLS(courseURL) {
     });
   });
 }
-
-/*function getFilesizeInKiloBytes(filename) {
-    let stats = fs.statSync(filename);
-    return stats["size"] / 1024;
-}*/
 
 /* Check if the video already exists in the directory. This is to avoid downloading files again. */
 function findVideoExist(videos, name, dwnpath) {
@@ -164,13 +151,15 @@ const replaceAll = function (target, search, replacement) {
   return target.replace(new RegExp(search, 'g'), replacement);
 };
 
-/*getCourseNamesAndURLS('https://coursehunters.net/course/node-js-prodvinutye-temy')
-    .then(result => {
-        downloadAllVideos(result.chapterUrls, result.names);
-    });*/
-
 /*  All Clientside Javascript */
 window.onload = () => {
+  isOnline().then(online => {
+    if(!online) {
+      alert("You are offline. Make sure you are connected to the internet. Exiting...");
+      app.exit(0);
+    }
+  });
+
   let videoBlock, vidName, dwnBtn, li, resultul = document.querySelector("#resultUL");
   document.querySelector(".progress").style.display = 'none';
   const getVideos = document.querySelector("#getVids");
