@@ -17,8 +17,7 @@ module.exports = env => {
     },
     devtool: "source-map",
     module: {
-      rules: [
-        {
+      rules: [{
           test: /\.js$/,
           exclude: /node_modules/,
           use: ["babel-loader"]
@@ -26,11 +25,22 @@ module.exports = env => {
         {
           test: /\.css$/,
           use: ["style-loader", "css-loader"]
+        },
+        {
+          test: /\.(png|jpg|gif)$/,
+          use: [{
+            loader: 'url-loader',
+            options: {
+              limit: 81920
+            }
+          }]
         }
       ]
     },
     plugins: [
-      new FriendlyErrorsWebpackPlugin({ clearConsole: env === "development" })
+      new FriendlyErrorsWebpackPlugin({
+        clearConsole: env === "development"
+      })
     ]
   };
 };

@@ -1,22 +1,25 @@
 <!doctype html>
 <html>
+
 <head>
   <meta charset="utf-8">
   <title>Course Hunt</title>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy"
+    crossorigin="anonymous">
 </head>
+
 <body>
 
   <div id="app" class="container mt-4">
-    <h1 class="text-center mt-4">CourseHunt</h1>
+    <h1 class="text-center mt-4 display-4">Course Hunt</h1>
     <p class="lead text-center">An app which lets you download videos from coursehunters.net</p>
 
     <div class="input-url">
       <div class="input-group mb-3">
         <input type="text" id="url" class="form-control" placeholder="Enter course url" aria-label="url">
-      </div>
-      <div class="text-center">
-        <button type="button" id="getVids" class="btn btn-success ml-auto">Get Videos</button>
+        <div class="input-group-append">
+          <button id="getVids" class="btn btn-outline-success" type="button">Get Videos</button>
+        </div>
       </div>
     </div>
 
@@ -25,13 +28,23 @@
         <ul id="resultUL" class="list-group list-group-flush"></ul>
       </div>
     </div>
-    <div id="downloadWrap" style="text-align: right"></div>
-    <div class="progress" style="height: 20px;">
-      <div id="dynamic" class="progress-bar progress-bar-striped bg-success progress-bar-animated" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+    <div id="downloadWrap">
+      <div style="margin-right: 20px;">
+        <div class="progress" style="height: 20px;">
+          <div id="dynamic" class="progress-bar progress-bar-striped bg-success progress-bar-animated" role="progressbar" aria-valuenow="0"
+            aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+        <div style="height: 20px;">
+          <em class="details" id="chaptername"></em><br>
+          <em class="details" id="speed"></em>
+          <em class="details" id="timeLeft"></em>
+          <button id="cancel">Cancel</button>
+        </div>
+      </div>
     </div>
-    <div><em id="chaptername"></em></div>
   </div>
 
   <script src="app.js"></script>
 </body>
+
 </html>

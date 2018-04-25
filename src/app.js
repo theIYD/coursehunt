@@ -21,7 +21,7 @@ const progressDynamic = document.querySelector("#dynamic");
 function downloadOne(url, chapterName, dwnpath, nextVideo) {
   /*let arr = url.split('/');
   let fileName = arr[arr.length - 1];*/
-  progress(request(url), {
+  let req = progress(request(url), {
       throttle: 2000,
       delay: 1000
     })
@@ -33,6 +33,8 @@ function downloadOne(url, chapterName, dwnpath, nextVideo) {
           .text(Math.floor(state.percent * 100) + "% Complete");*/
       document.querySelector(".progress").style.display = 'block';
       document.querySelector("#chaptername").textContent = chapterName;
+      document.querySelector("#speed").textContent = `${Math.floor(state.speed / 1024) } kB/s`;
+      document.querySelector("#timeLeft").textContent = `${Math.floor(state.time.remaining) / 60}m`;
       progressDynamic.style.width = `${Math.floor(state.percent * 100)}%`;
       progressDynamic.setAttribute("aria-valuenow", Math.floor(state.percent * 100));
       progressDynamic.textContent = `${Math.floor(state.percent * 100)}%`;
@@ -47,6 +49,7 @@ function downloadOne(url, chapterName, dwnpath, nextVideo) {
       nextVideo();
     })
     .pipe(fs.createWriteStream(path.resolve(`${dwnpath}${path.sep}${chapterName}.mp4`)));
+    //console.log(req);
 }
 
 /* Download all the videos at once. */
@@ -179,7 +182,7 @@ window.onload = () => {
         dwnBtn = document.createElement("button");
         dwnBtn.id = "download";
         dwnBtn.textContent = "Download All";
-        dwnBtn.classList.add("btn", "btn-dark", "mr-auto");
+        dwnBtn.classList.add("btn", "btn-dark");
         document.querySelector("#downloadWrap").appendChild(dwnBtn);
 
         while (document.querySelector('#resultUL').firstChild) {
@@ -192,7 +195,8 @@ window.onload = () => {
             li.classList.add("list-group-item", "vid")
             videoBlock = document.createElement("div");
             videoBlock.className = 'vidNameBlock';
-            vidName = document.createElement("p");
+            vidName = document.createElement("h6");
+            vidName.className = "chapter-name";
             vidName.appendChild(document.createTextNode(`${result.names[x]}`));
             videoBlock.appendChild(vidName);
             //console.log(videoBlock);

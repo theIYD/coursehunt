@@ -5,10 +5,10 @@
 
 import path from "path";
 import url from "url";
-import { app, Menu } from "electron";
+import { app, Menu, BrowserWindow } from "electron";
 //import { devMenuTemplate } from "./menu/dev_menu_template";
 //import { editMenuTemplate } from "./menu/edit_menu_template";
-import createWindow from "./helpers/window";
+//import createWindow from "./helpers/window";
 
 // Special module holding environment variables which you declared
 // in config/env_xxx.json file.
@@ -33,10 +33,7 @@ if (env.name !== "production") {
 app.on("ready", () => {
   //setApplicationMenu();
 
-  const mainWindow = createWindow("main", {
-    width: 800,
-    height: 600
-  });
+  const mainWindow = new BrowserWindow({width: 1000, height: 700})
 
   mainWindow.loadURL(
     url.format({

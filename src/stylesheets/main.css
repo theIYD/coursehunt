@@ -1,9 +1,14 @@
 html,
 body {
   width: 100%;
-  height: auto;
   margin: 0;
   padding: 0;
+}
+
+body {
+  background: url("../assets/bg.png") center center repeat;
+  margin-bottom: 4em;
+
 }
 
 #resultDiv {
@@ -21,7 +26,7 @@ body {
 }
 
 .container {
-  padding-bottom: 5rem;
+  /*padding-bottom: 5rem;*/
 }
 
 .vidNameBlock p {
@@ -47,4 +52,13 @@ body {
 	border-radius: 10px;
 	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
 	background-color: #111;
+}
+
+.details {
+  display: inline-block;
+}
+
+#downloadWrap {
+  display: flex;
+  justify-content: space-between;
 }
