@@ -70,9 +70,6 @@ const downloadOne = (url, chapterName, dwnpath, nextVideo) => {
       console.log(`Downloading: ${Math.floor(state.percent * 100)}% | ${Math.floor(state.speed / 1024) } kB/s | ${Math.floor(state.time.remaining)}s | ${Math.floor(state.size.transferred / 1024)} kilobytes`)
 
       let remainingTime = state.time.remaining;
-      let hours = Math.floor(remainingTime / 3600);
-      remainingTime -= hours * 3600;
-
       let minutes = Math.floor(remainingTime / 60);
       let seconds = remainingTime - minutes * 60;
       
@@ -81,7 +78,7 @@ const downloadOne = (url, chapterName, dwnpath, nextVideo) => {
       getQuerySelector(".progress").style.display = 'block';
       getQuerySelector("#chaptername").textContent = chapterName;
       getQuerySelector("#speed").textContent = `${Math.floor(state.speed / 1024) } kB/s`;
-      getQuerySelector("#timeLeft").textContent = `${downloadTimeRemaining(hours,'0',2)+'h:'+downloadTimeRemaining(minutes,'0',2)+'m:'+downloadTimeRemaining(seconds,'0',2)}s remaining`;
+      getQuerySelector("#timeLeft").textContent = `${downloadTimeRemaining(minutes,'0',2)+'m:'+downloadTimeRemaining(seconds,'0',2)}s remaining`;
       getQuerySelector("#transferred").textContent = `${formatBytes(state.size.transferred)} transferred`;
       getQuerySelector("#dynamic").style.width = `${Math.floor(state.percent * 100)}%`;
       getQuerySelector("#dynamic").setAttribute("aria-valuenow", Math.floor(state.percent * 100));

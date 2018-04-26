@@ -131,6 +131,8 @@ window.onload = () => {
               properties: ['openDirectory']
             });
 
+            if(dwnpath === undefined) return;
+
             if(!fs.existsSync(`${dwnpath}${path.sep}${course_url_title[course_url_title.length -1]}`)) {
               fs.mkdirSync(`${dwnpath}${path.sep}${course_url_title[course_url_title.length -1]}`);
             }
