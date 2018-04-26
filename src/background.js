@@ -34,7 +34,7 @@ if (env.name !== "production") {
 app.on("ready", () => {
   //setApplicationMenu();
   autoUpdater.checkForUpdatesAndNotify();
-  const mainWindow = new BrowserWindow({width: 1000, height: 700})
+  const mainWindow = new BrowserWindow({width: 1000, height: 700, show: false})
 
   mainWindow.loadURL(
     url.format({
@@ -43,7 +43,12 @@ app.on("ready", () => {
       slashes: true
     })
   );
-    mainWindow.openDevTools();
+  
+  mainWindow.once('ready-to-show', () => {
+    mainWindow.show();
+  });
+
+  if(env.name !== 'production') mainWindow.openDevTools();
 });
 
 app.on("window-all-closed", () => {
