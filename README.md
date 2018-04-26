@@ -1,7 +1,7 @@
 ![](https://github.com/theIYD/coursehunt/blob/master/doc/coursehunt.png)
 
 ## Coursehunt
-A desktop application which allows you to batch download a course from ![coursehunters.net](https://coursehunters.net). Coursehunters is a platform where you can download online courses for free, learn and spread knowledge.
+A desktop application which allows you to batch download a course from <a href="https://coursehunters.net">coursehunters</a>. Coursehunters is a platform where you can download online courses for free, learn and spread knowledge.
 
 #### Install
 Head over to the releases tab to download the latest setup.
