@@ -15,15 +15,10 @@ $ cd coursehunt
 $ yarn install
 ```
 
-Next, to start the application in development environment,
+Next, to start the application,
 ```sh
 $ npm start
 ```
-For a production build,
-```sh
-$ npm run release
-```
-The application, both the setup and the unpacked version will be in `dist/` directory.
 
 #### Contribute
 Contributions are always welcomed in the form of issues and pull requests.
