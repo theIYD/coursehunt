@@ -12,8 +12,8 @@ const getQuerySelector = (selector) => {
   return document.querySelector(selector);
 };
 
-const downloadTimeRemaining = (string, pad, length) => {
-    return (new Array(length+1).join(pad)+string).slice(-length);
+const downloadTimeRemaining = (time) => {
+    return (time > 60) ? `${Math.floor(time / 60)}m` : `${Math.floor(time)}s`;
 }
 
 const formatBytes = (bytes, decimals) => {
@@ -78,7 +78,7 @@ const downloadOne = (url, chapterName, dwnpath, nextVideo) => {
       getQuerySelector(".progress").style.display = 'block';
       getQuerySelector("#chaptername").textContent = chapterName;
       getQuerySelector("#speed").textContent = `${Math.floor(state.speed / 1024) } kB/s`;
-      getQuerySelector("#timeLeft").textContent = `${downloadTimeRemaining(minutes,'0',2)+'m:'+downloadTimeRemaining(seconds,'0',2)}s remaining`;
+      getQuerySelector("#timeLeft").textContent = `${downloadTimeRemaining(state.time.remaining)} remaining`;
       getQuerySelector("#transferred").textContent = `${formatBytes(state.size.transferred)} transferred`;
       getQuerySelector("#dynamic").style.width = `${Math.floor(state.percent * 100)}%`;
       getQuerySelector("#dynamic").setAttribute("aria-valuenow", Math.floor(state.percent * 100));
