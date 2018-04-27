@@ -6,7 +6,7 @@
   <title>Course Hunt</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
-
+  
 </head>
 
 <body>
@@ -40,9 +40,15 @@
         <div style="height: 20px;">
           <em class="details" id="chaptername"></em>
           <br>
-          <em class="details" id="speed"></em>
-          <em class="details" id="timeLeft"></em>
-          <em class="details" id="transferred"></em>
+          <div>
+            <em class="details" id="speed"></em>
+            <em class="details" id="timeLeft"></em>
+            <em class="details" id="transferred"></em>
+          </div>
+          <br>
+          <div id="action-wrap">
+            <button type="button" class="btn pause" id="action">Pause<i id="action-icon" class="material-icons"></i></button>
+          </div>
         </div>
       </div>
     </div>

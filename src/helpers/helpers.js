@@ -2,7 +2,9 @@ const fs = require('fs');
 const path = require('path');
 const request = require('request');
 const progress = require('request-progress');
-const {app} = require('electron').remote;
+const {
+  app
+} = require('electron').remote;
 
 const replaceAll = (target, search, replacement) => {
   return target.replace(new RegExp(search, 'g'), replacement);
@@ -13,17 +15,17 @@ const getQuerySelector = (selector) => {
 };
 
 const downloadTimeRemaining = (time) => {
-    return (time > 60) ? `${Math.floor(time / 60)}m` : `${Math.floor(time)}s`;
+  return (time > 60) ? `${Math.floor(time / 60)}m` : `${Math.floor(time)}s`;
 }
 
 const formatBytes = (bytes, decimals) => {
-    if(bytes == 0) return '0 Bytes';
-    var k = 1024,
-        dm = decimals || 2,
-        sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
-        i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
- }
+  if (bytes == 0) return '0 Bytes';
+  var k = 1024,
+    dm = decimals || 2,
+    sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
+    i = Math.floor(Math.log(bytes) / Math.log(k));
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+}
 
 const getDownloadedVideos = (downloadFolder) => {
   const log = `${downloadFolder}${path.sep}chapters.txt`;
@@ -62,19 +64,17 @@ const findVidExist = (videos, name, dwnpath) => {
 
 /* The basic function which downloads a video from the url */
 const downloadOne = (url, chapterName, dwnpath, nextVideo) => {
-  let req = progress(request(url), {
+  let _request = request(url);
+  let req = progress(_request, {
       throttle: 2000,
       delay: 1000
     })
     .on('progress', state => {
       console.log(`Downloading: ${Math.floor(state.percent * 100)}% | ${Math.floor(state.speed / 1024) } kB/s | ${Math.floor(state.time.remaining)}s | ${Math.floor(state.size.transferred / 1024)} kilobytes`)
 
-      let remainingTime = state.time.remaining;
-      let minutes = Math.floor(remainingTime / 60);
-      let seconds = remainingTime - minutes * 60;
-      
       getQuerySelector("#download").style.display = 'none';
       getQuerySelector("#downloadWrap").style.display = 'block';
+      getQuerySelector("#action-wrap").style.display = 'block';
       getQuerySelector(".progress").style.display = 'block';
       getQuerySelector("#chaptername").textContent = chapterName;
       getQuerySelector("#speed").textContent = `${Math.floor(state.speed / 1024) } kB/s`;
@@ -97,6 +97,19 @@ const downloadOne = (url, chapterName, dwnpath, nextVideo) => {
       nextVideo();
     })
     .pipe(fs.createWriteStream(path.resolve(`${dwnpath}${path.sep}${chapterName}.mp4`)));
+
+    getQuerySelector("#action").addEventListener("click", (e) => {
+      e.preventDefault();
+      if(getQuerySelector("#action").classList.contains("pause")) {
+        _request.pause();
+        getQuerySelector("#action").classList.remove(["pause"]);
+        getQuerySelector("#action").textContent = 'Resume';
+      } else {
+        _request.resume();
+        getQuerySelector("#action").classList.add(["pause"]);
+        getQuerySelector("#action").textContent = 'Pause';
+      }
+    });
 }
 
 module.exports = {

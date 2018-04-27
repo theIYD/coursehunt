@@ -85,6 +85,7 @@ window.onload = () => {
   let videoBlock,
     vidName,
     dwnBtn,
+    icon,
     li,
     resultul = helpers.getQuerySelector("#resultUL"),
     getVideos = helpers.getQuerySelector("#getVids");
@@ -103,9 +104,13 @@ window.onload = () => {
         }
         helpers.getQuerySelector("#resultDiv").style.display = "block";
         dwnBtn = document.createElement("button");
+        icon = document.createElement('i');
+        icon.className = 'material-icons';
+        icon.textContent = 'file_download';
         dwnBtn.id = "download";
-        dwnBtn.textContent = "Download All";
+        dwnBtn.textContent = "Download";
         dwnBtn.classList.add("btn", "btn-dark");
+        dwnBtn.appendChild(icon);
         helpers.getQuerySelector("#downloadWrap").appendChild(dwnBtn);
 
         while (helpers.getQuerySelector('#resultUL').firstChild) {

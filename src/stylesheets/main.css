@@ -92,3 +92,7 @@ body {
   0%,100% { opacity: 0 }
   50% { opacity: 0.9 }
 }
+
+#action-wrap {
+  display: none;
+}
