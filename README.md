@@ -29,10 +29,11 @@ $ npm start
 ## Credits
 Special thanks to [coursehunters](https://coursehunters.net/) for spreading knowledge by providing free courses from great platforms.
 
-- Electron
-- request and request-progress
-- cheerio
-- is-Online
+- [Electron](https://electronjs.org)
+- [request](https://github.com/request/request)
+- [request-progress](https://github.com/IndigoUnited/node-request-progress)
+- [cheerio](https://github.com/cheeriojs/cheerio)
+- [is-Online](https://github.com/sindresorhus/is-online)
 
 ## Contribute
 Contributions are always welcomed in the form of issues and pull requests.
