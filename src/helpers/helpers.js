@@ -2,28 +2,29 @@ const fs = require('fs');
 const path = require('path');
 const request = require('request');
 const progress = require('request-progress');
-const {app} = require('electron').remote;
+const isOnline = require('is-online');
+const {
+  app
+} = require('electron').remote;
+
+const selectors = require("./selectors");
 
 const replaceAll = (target, search, replacement) => {
   return target.replace(new RegExp(search, 'g'), replacement);
 };
 
-const getQuerySelector = (selector) => {
-  return document.querySelector(selector);
-};
-
 const downloadTimeRemaining = (time) => {
-    return (time > 60) ? `${Math.floor(time / 60)}m` : `${Math.floor(time)}s`;
+  return (time > 60) ? `${Math.floor(time / 60)}m` : `${Math.floor(time)}s`;
 }
 
 const formatBytes = (bytes, decimals) => {
-    if(bytes == 0) return '0 Bytes';
-    var k = 1024,
-        dm = decimals || 2,
-        sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
-        i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
- }
+  if (bytes == 0) return '0 Bytes';
+  var k = 1024,
+    dm = decimals || 2,
+    sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
+    i = Math.floor(Math.log(bytes) / Math.log(k));
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+}
 
 const getDownloadedVideos = (downloadFolder) => {
   const log = `${downloadFolder}${path.sep}chapters.txt`;
@@ -62,33 +63,32 @@ const findVidExist = (videos, name, dwnpath) => {
 
 /* The basic function which downloads a video from the url */
 const downloadOne = (url, chapterName, dwnpath, nextVideo) => {
-  let req = progress(request(url), {
+  let _request = request(url);
+  let req = progress(_request, {
       throttle: 2000,
       delay: 1000
     })
     .on('progress', state => {
       console.log(`Downloading: ${Math.floor(state.percent * 100)}% | ${Math.floor(state.speed / 1024) } kB/s | ${Math.floor(state.time.remaining)}s | ${Math.floor(state.size.transferred / 1024)} kilobytes`)
 
-      let remainingTime = state.time.remaining;
-      let minutes = Math.floor(remainingTime / 60);
-      let seconds = remainingTime - minutes * 60;
-      
-      getQuerySelector("#download").style.display = 'none';
-      getQuerySelector("#downloadWrap").style.display = 'block';
-      getQuerySelector(".progress").style.display = 'block';
-      getQuerySelector("#chaptername").textContent = chapterName;
-      getQuerySelector("#speed").textContent = `${Math.floor(state.speed / 1024) } kB/s`;
-      getQuerySelector("#timeLeft").textContent = `${downloadTimeRemaining(state.time.remaining)} remaining`;
-      getQuerySelector("#transferred").textContent = `${formatBytes(state.size.transferred)} transferred`;
-      getQuerySelector("#dynamic").style.width = `${Math.floor(state.percent * 100)}%`;
-      getQuerySelector("#dynamic").setAttribute("aria-valuenow", Math.floor(state.percent * 100));
-      getQuerySelector("#dynamic").textContent = `${Math.floor(state.percent * 100)}%`;
+      selectors.getQuerySelector("#download").style.display = 'none';
+      selectors.id_downloadWrap.style.display = 'block';
+      selectors.id_actionWrap.style.display = 'block';
+      selectors.class_progress.style.display = 'block';
+      selectors.id_chapterName.textContent = chapterName;
+      selectors.id_speed.textContent = `${Math.floor(state.speed / 1024) } kB/s`;
+      selectors.id_timeLeft.textContent = `${downloadTimeRemaining(state.time.remaining)} remaining`;
+      selectors.id_transferred.textContent = `${formatBytes(state.size.transferred)} transferred`;
+      selectors.id_dynamic.style.width = `${Math.floor(state.percent * 100)}%`;
+      selectors.id_dynamic.setAttribute("aria-valuenow", Math.floor(state.percent * 100));
+      selectors.id_dynamic.textContent = `${Math.floor(state.percent * 100)}%`;
     })
     .on('error', err => {
-      console.log(err);
-      alert("Connection error. Please check your internet connectivity." + err);
-      app.relaunch();
-      app.exit(0);
+      if(err) {
+        alert("Connection error. Please check your internet connectivity." + err);
+        app.relaunch();
+        app.exit(0);
+      }
     })
     .on('end', () => {
       fs.appendFile(path.resolve(`${dwnpath}${path.sep}chapters.txt`), chapterName + '\n', (err) => {
@@ -97,11 +97,32 @@ const downloadOne = (url, chapterName, dwnpath, nextVideo) => {
       nextVideo();
     })
     .pipe(fs.createWriteStream(path.resolve(`${dwnpath}${path.sep}${chapterName}.mp4`)));
+
+    selectors.id_action.addEventListener("click", (e) => {
+      e.preventDefault();
+      if(selectors.id_action.classList.contains("pause")) {
+        pauseIt(_request, "#action");
+      } else {
+        resumeIt(_request, "#action");
+      }
+    });
 }
+
+const pauseIt = (req, selector) => {
+  req.pause();
+  setTimeout(() => selectors.id_chapterName.textContent = `Paused`, 2000);
+  selectors.getQuerySelector(`${selector}`).classList.remove(["pause"]);
+  selectors.getQuerySelector(`${selector}`).textContent = 'Resume';
+};
+
+const resumeIt = (req, selector) => {
+  req.resume();
+  selectors.getQuerySelector(`${selector}`).classList.add(["pause"]);
+  selectors.getQuerySelector(`${selector}`).textContent = 'Pause';
+};
 
 module.exports = {
   replaceAll: replaceAll,
-  getQuerySelector: getQuerySelector,
   getDownloadedVideos: getDownloadedVideos,
   isComplete: isComplete,
   findVidExist: findVidExist,
