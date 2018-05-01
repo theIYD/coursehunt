@@ -15,7 +15,8 @@
     ],
     "directories": {
       "buildResources": "resources"
-    }
+    },
+    "publish": null
   },
   "scripts": {
     "postinstall": "electron-builder install-app-deps",

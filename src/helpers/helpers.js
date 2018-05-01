@@ -102,6 +102,7 @@ const downloadOne = (url, chapterName, dwnpath, nextVideo) => {
       e.preventDefault();
       if(getQuerySelector("#action").classList.contains("pause")) {
         _request.pause();
+        setTimeout(() => getQuerySelector("#chaptername").textContent = `Paused`, 2000);
         getQuerySelector("#action").classList.remove(["pause"]);
         getQuerySelector("#action").textContent = 'Resume';
       } else {

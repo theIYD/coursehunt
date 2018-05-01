@@ -18,7 +18,7 @@ app.on("ready", () => {
 
   mainWindow.loadURL(
     url.format({
-      pathname: path.join(__dirname, "app.html"),
+      pathname: path.join(__dirname, "intro.html"),
       protocol: "file:",
       slashes: true
     })
@@ -28,7 +28,7 @@ app.on("ready", () => {
     mainWindow.show();
   });
 
-  if(env.name !== 'production') mainWindow.openDevTools();
+  if(env.name == 'development') mainWindow.openDevTools();
 });
 
 app.on("window-all-closed", () => {

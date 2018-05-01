@@ -105,7 +105,7 @@ window.onload = () => {
         dwnBtn = document.createElement("button");
         dwnBtn.id = "download";
         dwnBtn.textContent = "Download";
-        dwnBtn.classList.add("btn", "btn-dark", "btn-sm");
+        dwnBtn.classList.add("btn", "btn-custom", "btn-sm");
         dwnBtn.style.height = '40px';
         helpers.getQuerySelector("#downloadWrap").appendChild(dwnBtn);
 
