@@ -12,9 +12,40 @@ if (env.name !== "production") {
   app.setPath("userData", `${userDataPath} (${env.name})`);
 }
 
+//Menu template
+const template = {
+  label: "Options", 
+  submenu: [
+    {
+      label: "Toggle DevTools",
+      accelerator: "Alt+CmdOrCtrl+I",
+      click: () => {
+        BrowserWindow.getFocusedWindow().toggleDevTools();
+      }
+    },
+    {
+      label: "Quit",
+      accelerator: "CmdOrCtrl+Q",
+      click: () => {
+        app.quit();
+      }
+    }
+  ]
+};
+
+const setApplicationMenu = () => {
+  const menus = [];
+  if (env.name == "production") {
+    menus.push(template);
+  }
+  Menu.setApplicationMenu(Menu.buildFromTemplate(menus));
+};
+
 app.on("ready", () => {
   autoUpdater.checkForUpdatesAndNotify();
-  const mainWindow = new BrowserWindow({width: 1000, height: 700, resizable: false, show: false})
+
+  setApplicationMenu();
+  const mainWindow = new BrowserWindow({width: 1200, height: 700, resizable: false, show: false})
 
   mainWindow.loadURL(
     url.format({
