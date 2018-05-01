@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const request = require('request');
 const progress = require('request-progress');
+const isOnline = require('is-online');
 const {
   app
 } = require('electron').remote;
@@ -85,10 +86,11 @@ const downloadOne = (url, chapterName, dwnpath, nextVideo) => {
       getQuerySelector("#dynamic").textContent = `${Math.floor(state.percent * 100)}%`;
     })
     .on('error', err => {
-      console.log(err);
-      alert("Connection error. Please check your internet connectivity." + err);
-      app.relaunch();
-      app.exit(0);
+      if(err) {
+        alert("Connection error. Please check your internet connectivity." + err);
+        app.relaunch();
+        app.exit(0);
+      }
     })
     .on('end', () => {
       fs.appendFile(path.resolve(`${dwnpath}${path.sep}chapters.txt`), chapterName + '\n', (err) => {
@@ -101,17 +103,25 @@ const downloadOne = (url, chapterName, dwnpath, nextVideo) => {
     getQuerySelector("#action").addEventListener("click", (e) => {
       e.preventDefault();
       if(getQuerySelector("#action").classList.contains("pause")) {
-        _request.pause();
-        setTimeout(() => getQuerySelector("#chaptername").textContent = `Paused`, 2000);
-        getQuerySelector("#action").classList.remove(["pause"]);
-        getQuerySelector("#action").textContent = 'Resume';
+        pauseIt(_request, "#action");
       } else {
-        _request.resume();
-        getQuerySelector("#action").classList.add(["pause"]);
-        getQuerySelector("#action").textContent = 'Pause';
+        resumeIt(_request, "#action");
       }
     });
 }
+
+const pauseIt = (req, selector) => {
+  req.pause();
+  setTimeout(() => getQuerySelector("#chaptername").textContent = `Paused`, 2000);
+  getQuerySelector(`${selector}`).classList.remove(["pause"]);
+  getQuerySelector(`${selector}`).textContent = 'Resume';
+};
+
+const resumeIt = (req, selector) => {
+  req.resume();
+  getQuerySelector(`${selector}`).classList.add(["pause"]);
+  getQuerySelector(`${selector}`).textContent = 'Pause';
+};
 
 module.exports = {
   replaceAll: replaceAll,
