@@ -11,6 +11,7 @@ const {
 } = require('electron').remote;
 
 const helpers = require('./helpers/helpers');
+const selectors = require("./helpers/selectors");
 
 /* Download all the videos at once. */
 function downloadAllVideos(videos, name, dwnpath) {
@@ -86,34 +87,34 @@ window.onload = () => {
     vidName,
     dwnBtn,
     li,
-    resultul = helpers.getQuerySelector("#resultUL"),
-    getVideos = helpers.getQuerySelector("#getVids");
+    resultul = selectors.id_resultUl,
+    getVideos = selectors.id_getVideos;
 
-  helpers.getQuerySelector(".progress").style.display = 'none';
+  selectors.class_progress.style.display = 'none';
   getVideos.addEventListener("click", () => {
-    helpers.getQuerySelector("#overlay").style.display = 'block';
-    const url = helpers.getQuerySelector("#url").value;
+    selectors.id_overlay.style.display = 'block';
+    const url = selectors.id_url.value;
     let course_url_title = url.split('/');
     getCourseNamesAndURLS(url)
       .then(result => {
-        if(result) {
+        if (result) {
           setTimeout(() => {
-            helpers.getQuerySelector("#overlay").style.display = 'none';
+            selectors.id_overlay.style.display = 'none';
           }, 3000)
         }
-        helpers.getQuerySelector("#resultDiv").style.display = "block";
+        selectors.id_resultDiv.style.display = "block";
         dwnBtn = document.createElement("button");
         dwnBtn.id = "download";
         dwnBtn.textContent = "Download";
         dwnBtn.classList.add("btn", "btn-custom", "btn-sm");
         dwnBtn.style.height = '40px';
-        helpers.getQuerySelector("#downloadWrap").appendChild(dwnBtn);
+        selectors.id_downloadWrap.appendChild(dwnBtn);
 
-        while (helpers.getQuerySelector('#resultUL').firstChild) {
-          helpers.getQuerySelector('#resultUL').removeChild(helpers.getQuerySelector('#resultUL').firstChild);
+        while (selectors.id_resultUl.firstChild) {
+          selectors.id_resultUl.removeChild(selectors.id_resultUl.firstChild);
         }
 
-        if (!helpers.getQuerySelector(".vid")) {
+        if (!selectors.class_vid) {
           for (let x = 0; x < result.names.length; x++) {
             li = document.createElement("li");
             li.classList.add("list-group-item", "vid")
@@ -132,9 +133,9 @@ window.onload = () => {
               properties: ['openDirectory']
             });
 
-            if(dwnpath === undefined) return;
+            if (dwnpath === undefined) return;
 
-            if(!fs.existsSync(`${dwnpath}${path.sep}${course_url_title[course_url_title.length -1]}`)) {
+            if (!fs.existsSync(`${dwnpath}${path.sep}${course_url_title[course_url_title.length -1]}`)) {
               fs.mkdirSync(`${dwnpath}${path.sep}${course_url_title[course_url_title.length -1]}`);
             }
             //console.log(`${dwnpath}${path.sep}${course_url_title[course_url_title.length -1]}`);

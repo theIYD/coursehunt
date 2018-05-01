@@ -7,12 +7,10 @@ const {
   app
 } = require('electron').remote;
 
+const selectors = require("./selectors");
+
 const replaceAll = (target, search, replacement) => {
   return target.replace(new RegExp(search, 'g'), replacement);
-};
-
-const getQuerySelector = (selector) => {
-  return document.querySelector(selector);
 };
 
 const downloadTimeRemaining = (time) => {
@@ -73,17 +71,17 @@ const downloadOne = (url, chapterName, dwnpath, nextVideo) => {
     .on('progress', state => {
       console.log(`Downloading: ${Math.floor(state.percent * 100)}% | ${Math.floor(state.speed / 1024) } kB/s | ${Math.floor(state.time.remaining)}s | ${Math.floor(state.size.transferred / 1024)} kilobytes`)
 
-      getQuerySelector("#download").style.display = 'none';
-      getQuerySelector("#downloadWrap").style.display = 'block';
-      getQuerySelector("#action-wrap").style.display = 'block';
-      getQuerySelector(".progress").style.display = 'block';
-      getQuerySelector("#chaptername").textContent = chapterName;
-      getQuerySelector("#speed").textContent = `${Math.floor(state.speed / 1024) } kB/s`;
-      getQuerySelector("#timeLeft").textContent = `${downloadTimeRemaining(state.time.remaining)} remaining`;
-      getQuerySelector("#transferred").textContent = `${formatBytes(state.size.transferred)} transferred`;
-      getQuerySelector("#dynamic").style.width = `${Math.floor(state.percent * 100)}%`;
-      getQuerySelector("#dynamic").setAttribute("aria-valuenow", Math.floor(state.percent * 100));
-      getQuerySelector("#dynamic").textContent = `${Math.floor(state.percent * 100)}%`;
+      selectors.getQuerySelector("#download").style.display = 'none';
+      selectors.id_downloadWrap.style.display = 'block';
+      selectors.id_actionWrap.style.display = 'block';
+      selectors.class_progress.style.display = 'block';
+      selectors.id_chapterName.textContent = chapterName;
+      selectors.id_speed.textContent = `${Math.floor(state.speed / 1024) } kB/s`;
+      selectors.id_timeLeft.textContent = `${downloadTimeRemaining(state.time.remaining)} remaining`;
+      selectors.id_transferred.textContent = `${formatBytes(state.size.transferred)} transferred`;
+      selectors.id_dynamic.style.width = `${Math.floor(state.percent * 100)}%`;
+      selectors.id_dynamic.setAttribute("aria-valuenow", Math.floor(state.percent * 100));
+      selectors.id_dynamic.textContent = `${Math.floor(state.percent * 100)}%`;
     })
     .on('error', err => {
       if(err) {
@@ -100,9 +98,9 @@ const downloadOne = (url, chapterName, dwnpath, nextVideo) => {
     })
     .pipe(fs.createWriteStream(path.resolve(`${dwnpath}${path.sep}${chapterName}.mp4`)));
 
-    getQuerySelector("#action").addEventListener("click", (e) => {
+    selectors.id_action.addEventListener("click", (e) => {
       e.preventDefault();
-      if(getQuerySelector("#action").classList.contains("pause")) {
+      if(selectors.id_action.classList.contains("pause")) {
         pauseIt(_request, "#action");
       } else {
         resumeIt(_request, "#action");
@@ -112,20 +110,19 @@ const downloadOne = (url, chapterName, dwnpath, nextVideo) => {
 
 const pauseIt = (req, selector) => {
   req.pause();
-  setTimeout(() => getQuerySelector("#chaptername").textContent = `Paused`, 2000);
-  getQuerySelector(`${selector}`).classList.remove(["pause"]);
-  getQuerySelector(`${selector}`).textContent = 'Resume';
+  setTimeout(() => selectors.id_chapterName.textContent = `Paused`, 2000);
+  selectors.getQuerySelector(`${selector}`).classList.remove(["pause"]);
+  selectors.getQuerySelector(`${selector}`).textContent = 'Resume';
 };
 
 const resumeIt = (req, selector) => {
   req.resume();
-  getQuerySelector(`${selector}`).classList.add(["pause"]);
-  getQuerySelector(`${selector}`).textContent = 'Pause';
+  selectors.getQuerySelector(`${selector}`).classList.add(["pause"]);
+  selectors.getQuerySelector(`${selector}`).textContent = 'Pause';
 };
 
 module.exports = {
   replaceAll: replaceAll,
-  getQuerySelector: getQuerySelector,
   getDownloadedVideos: getDownloadedVideos,
   isComplete: isComplete,
   findVidExist: findVidExist,
