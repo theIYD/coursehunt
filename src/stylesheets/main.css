@@ -111,3 +111,7 @@ body {
   background-image: none;
   border-color: #3F51B5;
 }
+
+.bg-info {
+  background-color: #3F51B5 !important;
+}

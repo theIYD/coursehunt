@@ -14,7 +14,7 @@ if (env.name !== "production") {
 
 app.on("ready", () => {
   autoUpdater.checkForUpdatesAndNotify();
-  const mainWindow = new BrowserWindow({width: 1000, height: 700, show: false})
+  const mainWindow = new BrowserWindow({width: 1000, height: 700, resizable: false, show: false})
 
   mainWindow.loadURL(
     url.format({
