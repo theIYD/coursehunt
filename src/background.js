@@ -34,8 +34,10 @@ app.on("ready", () => {
     width: 800, 
     height: 600, 
     resizable: false, 
-    show: false 
-  })
+    show: false,
+    titleBarStyle: 'hiddenInset',
+    backgroundColor: '#fff'
+  });
 
   mainWindow.loadURL(
     url.format({

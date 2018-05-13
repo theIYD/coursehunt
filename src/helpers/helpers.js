@@ -101,16 +101,16 @@ const downloadOne = (url, chapterName, dwnpath, nextVideo) => {
     selectors.id_action.addEventListener("click", (e) => {
       e.preventDefault();
       if(selectors.id_action.classList.contains("pause")) {
-        pauseIt(_request, "#action");
+        setTimeout(() => pauseIt(_request, "#action"), 1500);
       } else {
-        resumeIt(_request, "#action");
+        setTimeout(() => resumeIt(_request, "#action"), 1000);
       }
     });
 }
 
 const pauseIt = (req, selector) => {
   req.pause();
-  setTimeout(() => selectors.id_chapterName.textContent = `Paused`, 2000);
+  selectors.id_chapterName.textContent = `Paused`;
   selectors.getQuerySelector(`${selector}`).classList.remove(["pause"]);
   selectors.getQuerySelector(`${selector}`).textContent = 'Resume';
 };
