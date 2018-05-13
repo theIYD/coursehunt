@@ -18,6 +18,7 @@ const id_getVideos = getQuerySelector("#getVids");
 const id_overlay = getQuerySelector("#overlay");
 const id_url = getQuerySelector("#url");
 const id_resultDiv = getQuerySelector("#resultDiv");
+const id_progress_wrap = getQuerySelector("#progress-wrap");
 const class_vid = getQuerySelector(".vid");
   
 module.exports = {
@@ -35,6 +36,7 @@ module.exports = {
     id_overlay: id_overlay,
     id_url: id_url,
     id_resultDiv: id_resultDiv,
+    id_progress_wrap: id_progress_wrap,
     class_vid: class_vid,
     class_progress: class_progress,
     getQuerySelector: getQuerySelector

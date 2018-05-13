@@ -63,10 +63,15 @@ const findVidExist = (videos, name, dwnpath) => {
 
 /* The basic function which downloads a video from the url */
 const downloadOne = (url, chapterName, dwnpath, nextVideo) => {
+  if(typeof url === 'undefined'){
+    //alert("Download Completed");
+    //selectors.id_downloadWrap.style.display = 'none';
+    //process.exit(0);
+  }
   let _request = request(url);
   let req = progress(_request, {
-      throttle: 2000,
-      delay: 1000
+      //throttle: 2000,
+      //delay: 1000
     })
     .on('progress', state => {
       console.log(`Downloading: ${Math.floor(state.percent * 100)}% | ${Math.floor(state.speed / 1024) } kB/s | ${Math.floor(state.time.remaining)}s | ${Math.floor(state.size.transferred / 1024)} kilobytes`)
@@ -94,7 +99,7 @@ const downloadOne = (url, chapterName, dwnpath, nextVideo) => {
       fs.appendFile(path.resolve(`${dwnpath}${path.sep}chapters.txt`), chapterName + '\n', (err) => {
         if (err) console.log(err);
       });
-      nextVideo();
+      if(typeof url !== 'undefined') nextVideo();
     })
     .pipe(fs.createWriteStream(path.resolve(`${dwnpath}${path.sep}${chapterName}.mp4`)));
 

@@ -7,7 +7,8 @@ const fs = require('fs');
 const isOnline = require('is-online');
 const {
   dialog,
-  app
+  app,
+  getCurrentWindow
 } = require('electron').remote;
 
 const helpers = require('./helpers/helpers');
@@ -21,13 +22,19 @@ function downloadAllVideos(videos, name, dwnpath) {
   downloading together will reduce the speed and can cause crashes. */
   const loopDownload = (video, name) => {
     helpers.download(video[temp], name[temp], dwnpath, () => {
+      temp++;
+      if(temp >= video.length) {
+        alert("Download completed");
+        selectors.id_progress_wrap.style.display = 'none';
+        getCurrentWindow().reload();
+      }
       if (temp < video.length && name.length) {
-        temp++;
         loopDownload(video, name);
       }
     });
   }
   loopDownload(videos, name);
+  return true;
 }
 
 /* Scrape the video download hrefs and course names from courseURL provided. */
