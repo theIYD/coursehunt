@@ -4,7 +4,7 @@ import { app, Menu, BrowserWindow } from "electron";
 import { appMenu } from './menus/app_menu';
 import { editMenuTemplate } from './menus/edit_menu';
 import { devMenuTemplate } from './menus/dev_menu';
-const {autoUpdater} = require("electron-updater");
+import { autoUpdater } from "electron-updater";
 import env from "env";
 
 // Save userData in separate folders for each environment.
@@ -30,7 +30,12 @@ app.on("ready", () => {
   autoUpdater.checkForUpdatesAndNotify();
 
   setApplicationMenu();
-  const mainWindow = new BrowserWindow({width: 1200, height: 700, resizable: false, show: false})
+  const mainWindow = new BrowserWindow({
+    width: 800, 
+    height: 600, 
+    resizable: false, 
+    show: false 
+  })
 
   mainWindow.loadURL(
     url.format({
@@ -43,8 +48,6 @@ app.on("ready", () => {
   mainWindow.once('ready-to-show', () => {
     mainWindow.show();
   });
-
-  if(env.name == 'development') mainWindow.openDevTools();
 });
 
 app.on("window-all-closed", () => {

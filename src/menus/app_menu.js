@@ -1,5 +1,7 @@
+import { app } from 'electron';
+
 export const appMenu = {
-    label: "Application",
+    label: app.getName(),
         submenu: [
             { label: "About Application", selector: "orderFrontStandardAboutPanel:" },
             { type: "separator" },

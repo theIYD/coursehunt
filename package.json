@@ -3,7 +3,6 @@
   "productName": "Course Hunt",
   "description": "Download the free courses from coursehunters.net easily",
   "version": "0.0.4",
-  "private": true,
   "author": "Idrees Dargahwala",
   "main": "app/background.js",
   "build": {
@@ -21,8 +20,7 @@
   "scripts": {
     "postinstall": "electron-builder install-app-deps",
     "start": "node build/start.js",
-    "publish": "build -p always",
-    "release": "webpack --config=build/webpack.app.config.js --env=production && electron-builder"
+    "release": "webpack --config=build/webpack.app.config.js --env=production && electron-builder -mwl"
   },
   "dependencies": {
     "cheerio": "^1.0.0-rc.2",
