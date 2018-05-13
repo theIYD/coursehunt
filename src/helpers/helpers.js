@@ -106,9 +106,9 @@ const downloadOne = (url, chapterName, dwnpath, nextVideo) => {
     selectors.id_action.addEventListener("click", (e) => {
       e.preventDefault();
       if(selectors.id_action.classList.contains("pause")) {
-        setTimeout(() => pauseIt(_request, "#action"), 1500);
+        pauseIt(_request, "#action");
       } else {
-        setTimeout(() => resumeIt(_request, "#action"), 1000);
+        resumeIt(_request, "#action");
       }
     });
 }
