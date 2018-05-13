@@ -1,6 +1,9 @@
 import path from "path";
 import url from "url";
 import { app, Menu, BrowserWindow } from "electron";
+import { appMenu } from './menus/app_menu';
+import { editMenuTemplate } from './menus/edit_menu';
+import { devMenuTemplate } from './menus/dev_menu';
 const {autoUpdater} = require("electron-updater");
 import env from "env";
 
@@ -12,33 +15,15 @@ if (env.name !== "production") {
   app.setPath("userData", `${userDataPath} (${env.name})`);
 }
 
-//Menu template
-const template = {
-  label: "Options", 
-  submenu: [
-    {
-      label: "Toggle DevTools",
-      accelerator: "Alt+CmdOrCtrl+I",
-      click: () => {
-        BrowserWindow.getFocusedWindow().toggleDevTools();
-      }
-    },
-    {
-      label: "Quit",
-      accelerator: "CmdOrCtrl+Q",
-      click: () => {
-        app.quit();
-      }
-    }
-  ]
-};
-
 const setApplicationMenu = () => {
-  const menus = [];
-  if (env.name == "production") {
-    menus.push(template);
+  let menus = [editMenuTemplate];
+  if(process.platform === 'darwin') {
+    menus.unshift(appMenu);
   }
-  Menu.setApplicationMenu(Menu.buildFromTemplate(menus));
+  if (env.name !== "production") {
+     menus.push(devMenuTemplate);
+  }
+   Menu.setApplicationMenu(Menu.buildFromTemplate(menus));
 };
 
 app.on("ready", () => {
