@@ -23,7 +23,7 @@ function downloadAllVideos(videos, name, dwnpath) {
   const loopDownload = (video, name) => {
     helpers.download(video[temp], name[temp], dwnpath, () => {
       temp++;
-      if(temp >= video.length) {
+      if (temp >= video.length) {
         alert("Download completed");
         selectors.id_progress_wrap.style.display = 'none';
         getCurrentWindow().reload();
@@ -101,54 +101,57 @@ window.onload = () => {
   getVideos.addEventListener("click", () => {
     selectors.id_overlay.style.display = 'block';
     const url = selectors.id_url.value;
-    let course_url_title = url.split('/');
-    getCourseNamesAndURLS(url)
-      .then(result => {
-        if (result) {
-          setTimeout(() => {
-            selectors.id_overlay.style.display = 'none';
-          }, 3000)
-        }
-        selectors.id_resultDiv.style.display = "block";
-        dwnBtn = document.createElement("button");
-        dwnBtn.id = "download";
-        dwnBtn.textContent = "Download";
-        dwnBtn.classList.add("btn", "btn-custom", "btn-sm");
-        dwnBtn.style.height = '40px';
-        selectors.id_downloadWrap.appendChild(dwnBtn);
-
-        while (selectors.id_resultUl.firstChild) {
-          selectors.id_resultUl.removeChild(selectors.id_resultUl.firstChild);
-        }
-
-        if (!selectors.class_vid) {
-          for (let x = 0; x < result.names.length; x++) {
-            li = document.createElement("li");
-            li.classList.add("list-group-item", "vid")
-            videoBlock = document.createElement("div");
-            videoBlock.className = 'vidNameBlock';
-            vidName = document.createElement("h6");
-            vidName.className = "chapter-name";
-            vidName.appendChild(document.createTextNode(`${result.names[x]}`));
-            videoBlock.appendChild(vidName);
-            //console.log(videoBlock);
-            li.appendChild(videoBlock);
-            resultul.appendChild(li);
+    if (helpers.isValidURL(url)) {
+      let course_url_title = url.split('/');
+      getCourseNamesAndURLS(url)
+        .then(result => {
+          if (result) {
+            setTimeout(() => {
+              selectors.id_overlay.style.display = 'none';
+            }, 3000)
           }
-          dwnBtn.addEventListener("click", () => {
-            let dwnpath = dialog.showOpenDialog({
-              properties: ['openDirectory']
-            });
+          selectors.id_resultDiv.style.display = "block";
+          dwnBtn = document.createElement("button");
+          dwnBtn.id = "download";
+          dwnBtn.textContent = "Download";
+          dwnBtn.classList.add("btn", "btn-custom", "btn-sm");
+          dwnBtn.style.height = '40px';
+          selectors.id_downloadWrap.appendChild(dwnBtn);
 
-            if (dwnpath === undefined) return;
+          while (selectors.id_resultUl.firstChild) {
+            selectors.id_resultUl.removeChild(selectors.id_resultUl.firstChild);
+          }
 
-            if (!fs.existsSync(`${dwnpath}${path.sep}${course_url_title[course_url_title.length -1]}`)) {
-              fs.mkdirSync(`${dwnpath}${path.sep}${course_url_title[course_url_title.length -1]}`);
+          if (!selectors.class_vid) {
+            for (let x = 0; x < result.names.length; x++) {
+              li = document.createElement("li");
+              li.classList.add("list-group-item", "vid")
+              videoBlock = document.createElement("div");
+              videoBlock.className = 'vidNameBlock';
+              vidName = document.createElement("h6");
+              vidName.className = "chapter-name";
+              vidName.appendChild(document.createTextNode(`${result.names[x]}`));
+              videoBlock.appendChild(vidName);
+              //console.log(videoBlock);
+              li.appendChild(videoBlock);
+              resultul.appendChild(li);
             }
-            //console.log(`${dwnpath}${path.sep}${course_url_title[course_url_title.length -1]}`);
-            downloadAllVideos(result.chapterUrls, result.names, `${dwnpath}${path.sep}${course_url_title[course_url_title.length -1]}`);
-          });
-        }
-      });
+            dwnBtn.addEventListener("click", () => {
+              let dwnpath = dialog.showOpenDialog({
+                properties: ['openDirectory']
+              });
+
+              if (dwnpath === undefined) return;
+
+              if (!fs.existsSync(`${dwnpath}${path.sep}${course_url_title[course_url_title.length - 1]}`)) {
+                fs.mkdirSync(`${dwnpath}${path.sep}${course_url_title[course_url_title.length - 1]}`);
+              }
+              //console.log(`${dwnpath}${path.sep}${course_url_title[course_url_title.length -1]}`);
+              downloadAllVideos(result.chapterUrls, result.names, `${dwnpath}${path.sep}${course_url_title[course_url_title.length - 1]}`);
+            });
+          }
+        });
+    }
+
   });
 }
