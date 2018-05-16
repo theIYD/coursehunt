@@ -1,7 +1,10 @@
 import path from "path";
 import url from "url";
 import { app, Menu, BrowserWindow } from "electron";
-const {autoUpdater} = require("electron-updater");
+import { appMenu } from './menus/app_menu';
+import { editMenuTemplate } from './menus/edit_menu';
+import { devMenuTemplate } from './menus/dev_menu';
+import { autoUpdater } from "electron-updater";
 import env from "env";
 
 // Save userData in separate folders for each environment.
@@ -12,44 +15,33 @@ if (env.name !== "production") {
   app.setPath("userData", `${userDataPath} (${env.name})`);
 }
 
-//Menu template
-const template = {
-  label: "Options", 
-  submenu: [
-    {
-      label: "Toggle DevTools",
-      accelerator: "Alt+CmdOrCtrl+I",
-      click: () => {
-        BrowserWindow.getFocusedWindow().toggleDevTools();
-      }
-    },
-    {
-      label: "Quit",
-      accelerator: "CmdOrCtrl+Q",
-      click: () => {
-        app.quit();
-      }
-    }
-  ]
-};
-
 const setApplicationMenu = () => {
-  const menus = [];
-  if (env.name == "production") {
-    menus.push(template);
+  let menus = [editMenuTemplate];
+  if(process.platform === 'darwin') {
+    menus.unshift(appMenu);
   }
-  Menu.setApplicationMenu(Menu.buildFromTemplate(menus));
+  if (env.name !== "production") {
+     menus.push(devMenuTemplate);
+  }
+   Menu.setApplicationMenu(Menu.buildFromTemplate(menus));
 };
 
 app.on("ready", () => {
   autoUpdater.checkForUpdatesAndNotify();
 
   setApplicationMenu();
-  const mainWindow = new BrowserWindow({width: 1200, height: 700, resizable: false, show: false})
+  const mainWindow = new BrowserWindow({
+    width: 800, 
+    height: 600, 
+    resizable: false, 
+    show: false,
+    titleBarStyle: 'hiddenInset',
+    backgroundColor: '#fff'
+  });
 
   mainWindow.loadURL(
     url.format({
-      pathname: path.join(__dirname, "intro.html"),
+      pathname: path.join(__dirname, "app.html"),
       protocol: "file:",
       slashes: true
     })
@@ -58,8 +50,6 @@ app.on("ready", () => {
   mainWindow.once('ready-to-show', () => {
     mainWindow.show();
   });
-
-  if(env.name == 'development') mainWindow.openDevTools();
 });
 
 app.on("window-all-closed", () => {

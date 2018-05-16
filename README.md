@@ -1,5 +1,7 @@
 ![](https://github.com/theIYD/coursehunt/blob/master/doc/coursehunt.png)
 
+![GitHub release](https://img.shields.io/github/release/theIYD/coursehunt.svg) ![Github All Releases](https://img.shields.io/github/downloads/theIYD/coursehunt/total.svg) ![GitHub stars](https://img.shields.io/github/stars/theIYD/coursehunt.svg?style=social&label=Stars) ![license](https://img.shields.io/github/license/theIYD/coursehunt.svg)
+
 ## Coursehunt
 A desktop application which allows you to batch download a course from <a href="https://coursehunters.net">coursehunters</a>. Coursehunters is a platform where you can download online courses for free, learn and spread knowledge.
 
@@ -9,7 +11,7 @@ Download - https://github.com/theIYD/coursehunt/releases
 - [x] On a click, batch download the course. The lessons are downloaded one by one without any internal interruptions.
 - [x] Get a realtime progress which shows you the download speed in kB/s, time remaining and the size transferred.
 - [x] Pause and resume the download at any instant. 
-- [ ] On sudden offline, pause the current download.
+- [x] On sudden offline, pause the current download.
 - [x] If the download is suddenly stopped due to some error, the file is re-downloaded again.
 
 ## Build
