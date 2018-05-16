@@ -2,7 +2,7 @@
   "name": "course-hunt",
   "productName": "Course Hunt",
   "description": "Download the free courses from coursehunters.net easily",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "author": "Idrees Dargahwala",
   "main": "app/background.js",
   "build": {
@@ -15,7 +15,7 @@
     "directories": {
       "buildResources": "resources"
     },
-    "publish": null
+    "publish": "null"
   },
   "scripts": {
     "postinstall": "electron-builder install-app-deps",
