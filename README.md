@@ -7,6 +7,8 @@ A desktop application which allows you to batch download a course from <a href="
 
 Download - https://github.com/theIYD/coursehunt/releases
 
+![](https://github.com/theIYD/coursehunt/blob/master/doc/screenshot.png)
+
 ## Features
 - [x] On a click, batch download the course. The lessons are downloaded one by one without any internal interruptions.
 - [x] Get a realtime progress which shows you the download speed in kB/s, time remaining and the size transferred.
