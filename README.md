@@ -1,6 +1,13 @@
-![](https://github.com/theIYD/coursehunt/blob/master/doc/coursehunt.png)
+<p align="center">
+  <img src="https://github.com/theIYD/coursehunt/blob/master/doc/coursehunt.png" />
+</p>
 
-![GitHub release](https://img.shields.io/github/release/theIYD/coursehunt.svg) ![Github All Releases](https://img.shields.io/github/downloads/theIYD/coursehunt/total.svg) ![GitHub stars](https://img.shields.io/github/stars/theIYD/coursehunt.svg?style=social&label=Stars) ![license](https://img.shields.io/github/license/theIYD/coursehunt.svg)
+<p align="center">
+  <img src="https://img.shields.io/github/release/theIYD/coursehunt.svg" />
+  <img src="https://img.shields.io/github/downloads/theIYD/coursehunt/total.svg" />
+  <img src="https://img.shields.io/github/license/theIYD/coursehunt.svg" />
+  <img src="https://img.shields.io/github/stars/theIYD/coursehunt.svg?style=social" />
+</p>
 
 ## Coursehunt
 A desktop application which allows you to batch download a course from <a href="https://coursehunters.net">coursehunters</a>. Coursehunters is a platform where you can download online courses for free, learn and spread knowledge.
