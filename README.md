@@ -29,7 +29,7 @@ Clone the github repository and install the dependencies using `yarn`.
 ```sh
 $ git clone https://github.com/theIYD/coursehunt coursehunt
 $ cd coursehunt
-$ yarn install
+$ npm install
 ```
 
 Next, to start the application,
