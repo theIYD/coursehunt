@@ -46,22 +46,20 @@ function getCourseNamesAndURLS(courseURL) {
         $("#lessons-list").filter(() => {
           let data = $("#lessons-list");
           let dataArray = data
-            .children(".lessons-list__li")
+            .children(".lessons-item")
             .children()
             .toArray();
 
           const filterChapterUrls = dataArray.filter(
             el => el.name === "link" && el.attribs.itemprop === "contentUrl"
           );
-          const filterNames = dataArray.filter(el => el.name === "span");
-
+          const filterNames = dataArray.filter(
+            el => el.name === "div" && el.attribs.class === "lessons-name"
+          );
           /* Here chapter names are fetched from the <span> tags */
-          filterNames.map(el => {
-            if (el.name === "span") {
-              const videoName = el.children[0].data.replace(/[\/:*?"<>|]/g, "");
-              const name = helpers.replaceAll(videoName, "Урок", "Lesson");
-              names.push(name);
-            }
+          filterNames.map((el, i) => {
+            const videoName = el.children[0].data.replace(/[\/:*?"<>|]/g, "");
+            names.push(`Lesson ${i + 1}. ${videoName}`);
           });
 
           /* Here chapter urls are fetched from the <span> tags */
