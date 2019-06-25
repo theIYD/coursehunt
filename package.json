@@ -2,7 +2,7 @@
   "name": "course-hunt",
   "productName": "Course Hunt",
   "description": "Download the free courses from coursehunters.net easily",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "author": "Idrees Dargahwala",
   "main": "app/background.js",
   "build": {
