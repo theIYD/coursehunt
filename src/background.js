@@ -27,7 +27,7 @@ const setApplicationMenu = () => {
 };
 
 app.on("ready", () => {
-  autoUpdater.checkForUpdatesAndNotify();
+  autoUpdater.checkForUpdates();
 
   setApplicationMenu();
   const mainWindow = new BrowserWindow({
